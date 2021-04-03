@@ -5,10 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:localChat"
         mc:Ignorable="d"
-        Title="Chat" Height="455" Width="610">
+        Title="Chat" Height="455" Width="810">
     <Grid>
-        <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="366" VerticalAlignment="Top" Width="577" Margin="10,10,0,0"/>
-        <Button x:Name="btnSend" Content="Send" HorizontalAlignment="Left" Margin="468,387,0,0" VerticalAlignment="Top" Width="116" RenderTransformOrigin="0.381,-0.104" Height="23" Click="btnSendClick"/>
-        <TextBox x:Name="message" HorizontalAlignment="Left" Height="23" Margin="10,387,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="453"/>
+        <ListBox x:Name="messagesListBox" HorizontalAlignment="Left" Height="366" VerticalAlignment="Top" Width="577" Margin="10,10,0,0"/>
+        <ListBox x:Name="clientsListBox" HorizontalAlignment="Right" Height="346" VerticalAlignment="Top" Width="190" Margin="10,30,10,0"/>
+        <Button x:Name="btnSend" Content="Send" HorizontalAlignment="Left" Margin="668,387,0,0" VerticalAlignment="Top" Width="116" RenderTransformOrigin="0.381,-0.104" Height="23" Click="btnSendClick"/>
+        <TextBox x:Name="messageInputField" HorizontalAlignment="Left" Height="23" Margin="10,387,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="653"/>
+        <Label Content="Online" HorizontalAlignment="Left" Margin="669,0,0,0" VerticalAlignment="Top" FontSize="15" FontWeight="DemiBold"/>
     </Grid>
 </Window>
