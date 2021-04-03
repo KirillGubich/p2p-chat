@@ -29,12 +29,18 @@ namespace localChat
         {
             InitializeComponent();
             chatManager = new ChatManager(name);
-            chatManager.initialize();
+            chatManager.Initialize();
         }
 
         private void btnSendClick(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            chatManager.Destroy();
+            System.Environment.Exit(0);
         }
     }
 }
