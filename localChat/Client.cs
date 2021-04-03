@@ -131,7 +131,7 @@ namespace localChat
 
         private void DisconnectClient(List<string> messageHistory, List<Client> clients)
         {
-            messageHistory.Add(name + " (" + DateTime.Now.ToLongTimeString() + "):" + " left chat");
+            messageHistory.Add("User " + name + " left the chat session");
             clients.Remove(this);
         }
 
@@ -148,12 +148,12 @@ namespace localChat
 
         private void ProccessMessageHistoryResponce(List<string> messageHistory, string message)
         {
-            string FullHistory = message.Substring(1);
+            string fullHistory = message.Substring(1);
             List<string> history = new List<string>();
-            while (FullHistory != "")
+            while (fullHistory != "")
             {
-                history.Add(FullHistory.Substring(0, FullHistory.IndexOf((char)1)));
-                FullHistory = FullHistory.Substring(FullHistory.IndexOf((char)1) + 1);
+                history.Add(fullHistory.Substring(0, fullHistory.IndexOf((char)1)));
+                fullHistory = fullHistory.Substring(fullHistory.IndexOf((char)1) + 1);
             }
             lock (ChatWindow.MessageThreadLock)
             {

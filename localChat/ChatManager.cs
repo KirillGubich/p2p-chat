@@ -16,7 +16,8 @@ namespace localChat
         private string clientName;
         private ClientsRegistrar clientsRegistrar;
         private Messenger messenger;
-        private const int HISTORY_RECEIVING_TIMEOUT = 5000;
+        private const int HISTORY_REQUEST_TIMEOUT = 5000;
+        private const int HISTORY_RECEIVING_TIMEOUT = 300;
 
         public ChatManager(string clientName)
         {
@@ -25,14 +26,6 @@ namespace localChat
             messageHistory = new List<string>();
             clientsRegistrar = new ClientsRegistrar();
             messenger = new Messenger();
-        }
-
-        public string ClientName
-        {
-            get
-            {
-                return clientName;
-            }
         }
 
         public List<Client> Clients
@@ -55,14 +48,11 @@ namespace localChat
         {   
             bool successfulyConected =  clientsRegistrar.SendRequest(clientName);
             StartReceiving();
-            if (successfulyConected)
-            {
-                messageHistory.Add(clientName +" (" + DateTime.Now.ToLongTimeString() + "):" + " joined chat");
-            }
-            else
+            if (!successfulyConected)
             {
                 MessageBox.Show("Connection error");
             }
+            messageHistory.Add("User " + clientName + " joined the chat session");
             Thread messageHistoryThread = new Thread(() => { RequestMessageHistory(); });
             messageHistoryThread.IsBackground = true;
             messageHistoryThread.Start();
@@ -81,17 +71,18 @@ namespace localChat
 
         private void RequestMessageHistory()
         {
+            Thread.Sleep(HISTORY_RECEIVING_TIMEOUT);
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             bool historyReceived = false;
-            while (stopwatch.ElapsedMilliseconds < HISTORY_RECEIVING_TIMEOUT && !historyReceived)
+            while (stopwatch.ElapsedMilliseconds < HISTORY_REQUEST_TIMEOUT && !historyReceived)
             {
                 if (clients.Count != 0)
                 {
                     messenger.SendMessageHistoryReauest(clients[0]);
                     historyReceived = true;
                 }
-            }   
+            }
         }
 
         private void StartReceiving()

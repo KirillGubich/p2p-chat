@@ -38,8 +38,8 @@ namespace localChat
                             Client client = new Client(receivedName, iPEndPoint.Address, tcpClient);
                             clients.Add(client);
                             StartMessageReceiving(client, messageHistory, clients);
+                            messageHistory.Add("User " + receivedName + " joined the chat session");
                             messenger.SendName(client, clientName);
-                            messageHistory.Add(clientName + " (" + DateTime.Now.ToLongTimeString() + "):" + " joined chat");
                         }     
                     }
                 }
