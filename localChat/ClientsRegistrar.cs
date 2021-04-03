@@ -14,10 +14,10 @@ namespace localChat
         private const int TCP_PORT = 31244;
 
         public void AcceptRequests(List<Client> clients, List<string> messageHistory, Messenger messenger, string clientName)
-        { 
+        {
             UdpClient udpCLient = null;
             try
-            {              
+            {
                 udpCLient = new UdpClient();
                 IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Any, UDP_PORT);
                 udpCLient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
@@ -40,7 +40,7 @@ namespace localChat
                             StartMessageReceiving(client, messageHistory, clients);
                             messageHistory.Add("User " + receivedName + " joined the chat session");
                             messenger.SendName(client, clientName);
-                        }     
+                        }
                     }
                 }
             }
@@ -54,7 +54,7 @@ namespace localChat
                 {
                     udpCLient.Close();
                 }
-            }    
+            }
         }
 
         public bool SendRequest(string name)
@@ -86,7 +86,7 @@ namespace localChat
                 {
                     udpCLient.Close();
                 }
-            } 
+            }
         }
 
         private TcpClient EstablishConnection(IPAddress iPAddress)

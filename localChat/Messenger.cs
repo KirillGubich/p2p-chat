@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Windows;
 
 namespace localChat
 {
@@ -30,12 +29,12 @@ namespace localChat
                     Client senderClient = clients.Find(client => client.IpAddress == senderIP);
                     if (senderClient == null)
                     {
-                        lock(ChatWindow.OnlineThreadLock)
+                        lock (ChatWindow.OnlineThreadLock)
                         {
                             Client client = new Client(null, senderIP, tcpClient);
                             clients.Add(client);
                             senderClient = client;
-                        }                    
+                        }
                     }
                     StartMessageReceiving(senderClient, messageHistory, clients);
                 }
@@ -96,7 +95,7 @@ namespace localChat
             client.Connection.GetStream().Write(messageWithCode, 0, messageWithCode.Length);
         }
 
-        private void StartMessageReceiving(Client senderClient,  List<string> messageHistory, List<Client> clients)
+        private void StartMessageReceiving(Client senderClient, List<string> messageHistory, List<Client> clients)
         {
             Thread messageReceivingThread = new Thread(() => { senderClient.ReceiveMessages(messageHistory, clients); });
             messageReceivingThread.IsBackground = true;

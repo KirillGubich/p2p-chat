@@ -112,7 +112,7 @@ namespace localChat
                                 ProccessMessageHistoryResponce(messageHistory, message);
                                 break;
                             }
-                    }            
+                    }
                 }
             }
             catch
