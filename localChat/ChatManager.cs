@@ -14,7 +14,7 @@ namespace localChat
         private ClientsRegistrar clientsRegistrar;
         private Messenger messenger;
         private const int HISTORY_REQUEST_TIMEOUT = 5000;
-        private const int HISTORY_RECEIVING_TIMEOUT = 300;
+        private const int HISTORY_RECEIVING_TIMEOUT = 1000;
 
         public ChatManager(string clientName)
         {
