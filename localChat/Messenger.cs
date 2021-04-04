@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Windows;
 
 namespace localChat
 {
@@ -39,9 +40,9 @@ namespace localChat
                     StartMessageReceiving(senderClient, messageHistory, clients);
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine(ex.Message);
+                MessageBox.Show("Connection request receiving error");
             }
             finally
             {

@@ -44,9 +44,9 @@ namespace localChat
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine(ex.StackTrace);
+                MessageBox.Show("Accept client error");
             }
             finally
             {
@@ -75,9 +75,9 @@ namespace localChat
                 int bytesSent = udpCLient.Send(registrationMessage, registrationMessage.Length);
                 return bytesSent == registrationMessage.Length;
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Request send error");
                 return false;
             }
             finally
@@ -97,9 +97,8 @@ namespace localChat
                 tcpClient.Connect(new IPEndPoint(iPAddress, TCP_PORT));
                 return tcpClient;
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine(ex.Message);
                 MessageBox.Show("TCP connection error");
                 return null;
             }

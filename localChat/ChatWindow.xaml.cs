@@ -3,19 +3,11 @@ using System.Windows;
 
 namespace localChat
 {
-    /// <summary>
-    /// Логика взаимодействия для ChatWindow.xaml
-    /// </summary>
     public partial class ChatWindow : Window
     {
         private ChatManager chatManager;
         public static object MessageThreadLock = new object();
         public static object OnlineThreadLock = new object();
-
-        public ChatWindow()
-        {
-            InitializeComponent();
-        }
 
         public ChatWindow(string name)
         {
