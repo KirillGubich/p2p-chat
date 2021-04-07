@@ -40,6 +40,7 @@ namespace localChat
                             StartMessageReceiving(client, messageHistory, clients);
                             messageHistory.Add("User " + receivedName + " joined the chat session");
                             messenger.SendName(client, clientName);
+                            ChatManager.UpdateView();
                         }
                     }
                 }

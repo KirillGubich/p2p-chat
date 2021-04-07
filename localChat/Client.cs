@@ -90,6 +90,7 @@ namespace localChat
                                 string resultMessage;
                                 resultMessage = name + " (" + DateTime.Now.ToLongTimeString() + "): " + message.Substring(1);
                                 messageHistory.Add(resultMessage);
+                                ChatManager.UpdateView();
                                 break;
                             }
                         case Messenger.NAME_CODE:
@@ -109,7 +110,8 @@ namespace localChat
                             }
                         case Messenger.MESSAGE_HISTORY_RESPONCE:
                             {
-                                ProccessMessageHistoryResponce(messageHistory, message);
+                                ProccessMessageHistoryResponse(messageHistory, message);
+                                ChatManager.UpdateView();
                                 break;
                             }
                     }
@@ -121,11 +123,8 @@ namespace localChat
             }
             finally
             {
-                if (OneUserStream != null)
-                    OneUserStream.Close();
                 if (Connection != null)
                     Connection.Close();
-
             }
         }
 
@@ -133,6 +132,7 @@ namespace localChat
         {
             messageHistory.Add("User " + name + " left the chat session");
             clients.Remove(this);
+            ChatManager.UpdateView();
         }
 
         private void ProccessMessageHistoryRequest(List<string> messageHistory)
@@ -146,7 +146,7 @@ namespace localChat
             messenger.SendMessageHistoryResponce(this, history);
         }
 
-        private void ProccessMessageHistoryResponce(List<string> messageHistory, string message)
+        private void ProccessMessageHistoryResponse(List<string> messageHistory, string message)
         {
             string fullHistory = message.Substring(1);
             List<string> history = new List<string>();

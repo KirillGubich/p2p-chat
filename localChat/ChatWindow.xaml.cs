@@ -8,23 +8,26 @@ namespace localChat
         private ChatManager chatManager;
         public static object MessageThreadLock = new object();
         public static object OnlineThreadLock = new object();
+        private static ChatWindow instance;
 
-        public ChatWindow(string name)
+        public ChatWindow()
         {
             InitializeComponent();
-            chatManager = new ChatManager(name);
-            InitChat();
         }
 
-        private void InitChat()
+        public void init(string name)
         {
-            Thread messageUpdater = new Thread(() => { UpdateMessageBox(); });
-            Thread onlineUpdater = new Thread(() => { UpdateOnlineBox(); });
-            messageUpdater.IsBackground = true;
-            onlineUpdater.IsBackground = true;
-            messageUpdater.Start();
-            onlineUpdater.Start();
+            chatManager = new ChatManager(name);
             chatManager.Initialize();
+        }
+
+        public static ChatWindow GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new ChatWindow();
+            }
+            return instance;
         }
 
         private void btnSendClick(object sender, RoutedEventArgs e)
@@ -43,62 +46,49 @@ namespace localChat
             System.Environment.Exit(0);
         }
 
-        private void UpdateMessageBox()
+        public void UpdateMessageBox()
         {
             int i;
             int ListCount = 0;
             int messageCount;
-            while (true)
+            
+            Dispatcher.Invoke(() =>
             {
-                Dispatcher.Invoke(() =>
+                lock (MessageThreadLock)
                 {
-                    lock (MessageThreadLock)
+                    messageCount = chatManager.MessageHistory.Count;
+                    messagesListBox.Items.Clear();
+                    for (i = 0; i < chatManager.MessageHistory.Count; i++)
                     {
-                        messageCount = chatManager.MessageHistory.Count;
-                        if (messageCount > ListCount)
-                        {
-                            messagesListBox.Items.Clear();
-                            for (i = 0; i < chatManager.MessageHistory.Count; i++)
-                            {
-                                messagesListBox.Items.Add(chatManager.MessageHistory[i]);
-                            }
-                            ListCount = messagesListBox.Items.Count;
-
-                            messagesListBox.ScrollIntoView(messagesListBox.Items[messagesListBox.Items.Count - 1]);
-                        }
-
+                        messagesListBox.Items.Add(chatManager.MessageHistory[i]);
                     }
+                    ListCount = messagesListBox.Items.Count;
+                    messagesListBox.ScrollIntoView(messagesListBox.Items[messagesListBox.Items.Count - 1]);
+                }
+            });
 
-                });
-                Thread.Sleep(200);
-            }
+            
         }
 
-        private void UpdateOnlineBox()
+        public void UpdateOnlineBox()
         {
-            Thread.Sleep(1000);
             int i;
             int listCount = 0;
             int onlineCount;
-            while (true)
+
+            Dispatcher.Invoke(() =>
             {
-                Dispatcher.Invoke(() =>
+                lock (OnlineThreadLock)
                 {
-                    lock (OnlineThreadLock)
+                    onlineCount = chatManager.Clients.Count;                
+                    clientsListBox.Items.Clear();
+                    for (i = 0; i < chatManager.Clients.Count; i++)
                     {
-                        onlineCount = chatManager.Clients.Count;
-                        if (onlineCount != listCount)
-                        {
-                            clientsListBox.Items.Clear();
-                            for (i = 0; i < chatManager.Clients.Count; i++)
-                            {
-                                clientsListBox.Items.Add(chatManager.Clients[i].Name + " [" + chatManager.Clients[i].IpAddress + "]");
-                            }
-                            listCount = clientsListBox.Items.Count;
-                        }
+                        clientsListBox.Items.Add(chatManager.Clients[i].Name + " [" + chatManager.Clients[i].IpAddress + "]");
                     }
-                });
-            }
+                    listCount = clientsListBox.Items.Count;                  
+                }
+            });
         }
     }
 }

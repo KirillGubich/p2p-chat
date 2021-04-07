@@ -8,11 +8,11 @@ namespace localChat
 {
     class ChatManager
     {
-        private List<Client> clients;
+        private readonly List<Client> clients;
         private List<string> messageHistory;
-        private string clientName;
+        private readonly string clientName;
         private ClientsRegistrar clientsRegistrar;
-        private Messenger messenger;
+        private readonly Messenger messenger;
         private const int HISTORY_REQUEST_TIMEOUT = 5000;
         private const int HISTORY_RECEIVING_TIMEOUT = 1000;
 
@@ -50,8 +50,11 @@ namespace localChat
                 MessageBox.Show("Connection error");
             }
             messageHistory.Add("User " + clientName + " joined the chat session");
-            Thread messageHistoryThread = new Thread(() => { RequestMessageHistory(); });
-            messageHistoryThread.IsBackground = true;
+            ChatManager.UpdateView();
+            Thread messageHistoryThread = new Thread(() => { RequestMessageHistory(); })
+            {
+                IsBackground = true
+            };
             messageHistoryThread.Start();
         }
 
@@ -59,11 +62,18 @@ namespace localChat
         {
             messenger.Send(clients, message);
             messageHistory.Add(clientName + " (" + DateTime.Now.ToLongTimeString() + ")" + ": " + message);
+            UpdateView();
         }
 
         public void Disconnect()
         {
             messenger.SendDisconnect(clients);
+        }
+
+        public static void UpdateView()
+        {
+            ChatWindow.GetInstance().UpdateMessageBox();
+            ChatWindow.GetInstance().UpdateOnlineBox();
         }
 
         private void RequestMessageHistory()

@@ -11,7 +11,8 @@ namespace localChat
 
         private void btnConnectClick(object sender, RoutedEventArgs e)
         {
-            ChatWindow chatWindow = new ChatWindow(nameInput.Text);
+            ChatWindow chatWindow = ChatWindow.GetInstance();
+            chatWindow.init(nameInput.Text);
             chatWindow.Show();
             Close();
         }
